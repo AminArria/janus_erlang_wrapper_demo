@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  janus:
+    build: ./janus
+    container_name: janus_gateway
+    ports:
+      - 8088:8088
+      - 8188:8188
+    volumes:
+      - ./janus/etc:/opt/janus/etc/janus
+    command: "/opt/janus/bin/janus -S stun.l.google.com:19302"
