@@ -6,11 +6,11 @@
          websocket_handle/3,
          websocket_info/3,
          websocket_terminate/3,
-         start_link/0]).
+         start_link/1]).
 
-start_link() ->
+start_link(From) ->
   Opts = [{extra_headers, [{<<"Sec-WebSocket-Protocol">>, <<"janus-protocol">>}]}],
-  websocket_client:start_link("ws://localhost:8188", ?MODULE, self(), Opts).
+  websocket_client:start_link("ws://localhost:8188", ?MODULE, From, Opts).
 
 % Websocket Handler
 init(From, _ConnState) ->

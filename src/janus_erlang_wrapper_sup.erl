@@ -1,38 +1,18 @@
-%%%-------------------------------------------------------------------
-%% @doc janus_erlang_wrapper top level supervisor.
-%% @end
-%%%-------------------------------------------------------------------
-
 -module(janus_erlang_wrapper_sup).
 
 -behaviour(supervisor).
 
-%% API
--export([start_link/0]).
+-export([init/1,
+         start_link/0]).
 
-%% Supervisor callbacks
--export([init/1]).
-
--define(SERVER, ?MODULE).
-
-%%====================================================================
-%% API functions
-%%====================================================================
+-export([]).
 
 start_link() ->
-    supervisor:start_link({local, ?SERVER}, ?MODULE, []).
+  supervisor:start_link({local, ?MODULE}, ?MODULE, []).
 
-%%====================================================================
-%% Supervisor callbacks
-%%====================================================================
-
-%% Child :: #{id => Id, start => {M, F, A}}
-%% Optional keys are restart, shutdown, type, modules.
-%% Before OTP 18 tuples must be used to specify a child. e.g.
-%% Child :: {Id,StartFunc,Restart,Shutdown,Type,Modules}
 init([]) ->
-    {ok, {{one_for_all, 0, 1}, []}}.
-
-%%====================================================================
-%% Internal functions
-%%====================================================================
+  JanusSup =
+    {janus_sup, {janus_sup, start_link, []},
+     permanent, infinity, supervisor, [janus_sup]
+    },
+  {ok, {{one_for_all, 10, 10}, [JanusSup]}}.
