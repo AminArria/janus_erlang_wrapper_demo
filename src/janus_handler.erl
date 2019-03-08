@@ -2,8 +2,7 @@
 
 -behaviour(websocket_client_handler).
 
--export([create_connection/0,
-         init/2,
+-export([init/2,
          websocket_handle/3,
          websocket_info/3,
          websocket_terminate/3,
@@ -12,11 +11,6 @@
 start_link(From) ->
   Opts = [{extra_headers, [{<<"Sec-WebSocket-Protocol">>, <<"janus-protocol">>}]}],
   websocket_client:start_link("ws://localhost:8188", ?MODULE, From, Opts).
-
-create_connection() ->
-  {ok, Pid} = janus_sup:create_janus_connection(),
-  Pid ! create_session,
-  Pid.
 
 % Websocket Handler
 init(From, _ConnState) ->
@@ -101,31 +95,31 @@ websocket_terminate(_Reason, _ConnState, _State) ->
 % Internal
 process(#{<<"transaction">> := <<"create_session">>,
           <<"data">> := #{<<"id">> := SessionId}}, State) ->
-  self() ! {create_handle, SessionId},
-  {ok, State#{session_id => SessionId}};
+  Msg = #{session_id => SessionId},
+  send_msg(Msg, State);
 process(#{<<"transaction">> := <<"create_handle">>,
-          <<"data">> := #{<<"id">> := HandleId}},
-        #{session_id := SessionId,
-          from := From} = State) ->
-  Msg = #{session_id => SessionId, handle_id => HandleId},
-  From ! {reply, Msg},
-  {ok, State};
-
+          <<"data">> := #{<<"id">> := HandleId}}, State) ->
+  Msg = #{handle_id => HandleId},
+  send_msg(Msg, State);
 process(#{<<"transaction">> := <<"create_room">>,
-          <<"plugindata">> := #{<<"data">> := #{<<"room">> := RoomId}}}, #{from := From} = State) ->
-  From ! {room_created, RoomId},
-  {ok, State};
+          <<"plugindata">> := #{<<"data">> := #{<<"room">> := RoomId}}}, State) ->
+  Msg = #{room_id => RoomId},
+  send_msg(Msg, State);
 process(#{<<"transaction">> := <<"join_publisher">>,
-          <<"plugindata">> := #{<<"data">> := #{<<"id">> := PubId}}}, #{from := From} = State) ->
-  From ! {publisher_joined, PubId},
-  {ok, State};
+          <<"plugindata">> := #{<<"data">> := #{<<"id">> := PubId}}}, State) ->
+  Msg = #{publisher_id => PubId},
+  send_msg(Msg, State);
 process(#{<<"transaction">> := <<"join_subscriber">>,
-          <<"jsep">> := Offer}, #{from := From} = State) ->
-  From ! {jsep_offer, Offer},
-  {ok, State};
+          <<"jsep">> := Offer}, State) ->
+  Msg = #{jsep => Offer},
+  send_msg(Msg, State);
 process(#{<<"transaction">> := <<"publish">>,
-          <<"jsep">> := Answer}, #{from := From} = State) ->
-  From ! {jsep_answer, Answer},
-  {ok, State};
+          <<"jsep">> := Answer}, State) ->
+  Msg = #{jsep => Answer},
+  send_msg(Msg, State);
 process(#{<<"janus">> := <<"ack">>}, State) ->
+  {ok, State}.
+
+send_msg(Msg, #{from := From} = State) ->
+  From ! {reply, Msg},
   {ok, State}.
