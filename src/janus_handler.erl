@@ -2,7 +2,8 @@
 
 -behaviour(websocket_client_handler).
 
--export([init/2,
+-export([create_connection/0,
+         init/2,
          websocket_handle/3,
          websocket_info/3,
          websocket_terminate/3,
@@ -11,6 +12,11 @@
 start_link(From) ->
   Opts = [{extra_headers, [{<<"Sec-WebSocket-Protocol">>, <<"janus-protocol">>}]}],
   websocket_client:start_link("ws://localhost:8188", ?MODULE, From, Opts).
+
+create_connection() ->
+  {ok, Pid} = janus_sup:create_janus_connection(),
+  Pid ! create_session,
+  Pid.
 
 % Websocket Handler
 init(From, _ConnState) ->
@@ -24,10 +30,10 @@ websocket_info(create_session, _ConnState, State) ->
   Msg = jsx:encode(#{janus => create, transaction => create_session}),
   {reply, {text, Msg}, State};
 
-websocket_info({create_handler, SessionId}, _ConnState, State) ->
+websocket_info({create_handle, SessionId}, _ConnState, State) ->
   Msg = jsx:encode(#{janus => attach,
                      plugin => <<"janus.plugin.videoroom">>,
-                     transaction => create_handler,
+                     transaction => create_handle,
                      session_id => SessionId}),
   {reply, {text, Msg}, State};
 
@@ -94,13 +100,17 @@ websocket_terminate(_Reason, _ConnState, _State) ->
 
 % Internal
 process(#{<<"transaction">> := <<"create_session">>,
-          <<"data">> := #{<<"id">> := SessionId}}, #{from := From} = State) ->
-  From ! {session_created, SessionId},
-  {ok, State};
+          <<"data">> := #{<<"id">> := SessionId}}, State) ->
+  self() ! {create_handle, SessionId},
+  {ok, State#{session_id => SessionId}};
 process(#{<<"transaction">> := <<"create_handle">>,
-          <<"data">> := #{<<"id">> := HandleId}}, #{from := From} = State) ->
-  From ! {handle_created, HandleId},
+          <<"data">> := #{<<"id">> := HandleId}},
+        #{session_id := SessionId,
+          from := From} = State) ->
+  Msg = #{session_id => SessionId, handle_id => HandleId},
+  From ! {reply, Msg},
   {ok, State};
+
 process(#{<<"transaction">> := <<"create_room">>,
           <<"plugindata">> := #{<<"data">> := #{<<"room">> := RoomId}}}, #{from := From} = State) ->
   From ! {room_created, RoomId},
