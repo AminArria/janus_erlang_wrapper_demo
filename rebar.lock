@@ -1,10 +1,16 @@
 {"1.1.0",
 [{<<"cowboy">>,{pkg,<<"cowboy">>,<<"2.6.1">>},0},
  {<<"cowlib">>,{pkg,<<"cowlib">>,<<"2.7.0">>},1},
- {<<"ranch">>,{pkg,<<"ranch">>,<<"1.7.1">>},1}]}.
+ {<<"jsx">>,{pkg,<<"jsx">>,<<"2.9.0">>},0},
+ {<<"ranch">>,{pkg,<<"ranch">>,<<"1.7.1">>},1},
+ {<<"websocket_client">>,
+  {git,"https://github.com/jeremyong/websocket_client.git",
+       {ref,"9a6f65d05ebf2725d62fb19262b21f1805a59fbf"}},
+  0}]}.
 [
 {pkg_hash,[
  {<<"cowboy">>, <<"F2E06F757C337B3B311F9437E6E072B678FCD71545A7B2865BDAA154D078593F">>},
  {<<"cowlib">>, <<"3EF16E77562F9855A2605900CEDB15C1462D76FB1BE6A32FC3AE91973EE543D2">>},
+ {<<"jsx">>, <<"D2F6E5F069C00266CAD52FB15D87C428579EA4D7D73A33669E12679E203329DD">>},
  {<<"ranch">>, <<"6B1FAB51B49196860B733A49C07604465A47BDB78AA10C1C16A3D199F7F8C881">>}]}
 ].

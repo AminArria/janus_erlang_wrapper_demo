@@ -6,7 +6,9 @@
   {applications,
    [kernel,
     stdlib,
-    cowboy
+    cowboy,
+    jsx,
+    websocket_client
    ]},
   {env,[]},
   {modules, []},
