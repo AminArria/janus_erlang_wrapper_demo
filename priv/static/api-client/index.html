@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+    <script src="/assets/api-client/webrtc.js"></script>
+  </head>
+
+  <body>
+    <video id="localVideo" autoplay muted style="width:40%;"></video>
+    <video id="remoteVideo" autoplay style="width:40%;"></video>
+    <br/>
+    <label>Room ID:</label>
+    <input type="text" id="room_id"></input>
+    <label>Feed ID:</label>
+    <input type="text" id="feed_id"></input>
+    <br/>
+    <br/>
+    <input type="button" id="start" onclick="start_session()" value="Start session"></input>
+    <br/>
+    <input type="button" id="start" onclick="start_handle()" value="Start Handle"></input>
+    <br/>
+    <br/>
+    <input type="button" id="start" onclick="make_room()" value="Make Room"></input>
+    <br/>
+    <input type="button" id="start" onclick="join_room_publisher()" value="Join room as publisher"></input>
+    <!-- <input type="button" id="start" onclick="join_room_subscriber()" value="Join room as subscriber"></input> -->
+    <br/>
+    <input type="button" id="start" onclick="start_broadcast()" value="Start Broadcasting"></input>
+    <input type="button" id="start" onclick="join_broadcast()" value="Join broadcast"></input>
+
+    <script type="text/javascript">
+        page_ready();
+    </script>
+  </body>
+</html>

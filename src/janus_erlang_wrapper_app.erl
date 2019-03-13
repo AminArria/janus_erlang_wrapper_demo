@@ -10,6 +10,7 @@ start(_StartType, _StartArgs) ->
     [{'_',
       [{"/websocket", ws_handler, #{}},
        {"/janus-client", cowboy_static, {priv_file, janus_erlang_wrapper, "static/janus-client/index.html"}},
+       {"/api-client", cowboy_static, {priv_file, janus_erlang_wrapper, "static/api-client/index.html"}},
        {"/assets/[...]", cowboy_static, {priv_dir, janus_erlang_wrapper, "static"}}]
     }]),
     {ok, _} = cowboy:start_clear(my_http_listener,
