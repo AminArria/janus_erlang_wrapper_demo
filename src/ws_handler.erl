@@ -57,14 +57,14 @@ process(#{<<"request">> := <<"publish">>,
           <<"session_id">> := SessionId,
           <<"handle_id">> := HandleId,
           <<"jsep">> := Offer}, #{janus_ws := JanusWs} = State) ->
-  JanusWs ! {send_offer, SessionId, HandleId, Offer},
+  JanusWs ! {publish, SessionId, HandleId, Offer},
   {ok, State};
 
 process(#{<<"request">> := <<"listen">>,
           <<"session_id">> := SessionId,
           <<"handle_id">> := HandleId,
           <<"jsep">> := Answer}, #{janus_ws := JanusWs} = State) ->
-  JanusWs ! {send_answer, SessionId, HandleId, Answer},
+  JanusWs ! {listen, SessionId, HandleId, Answer},
   {ok, State};
 
 process(#{<<"request">> := <<"trickle">>,

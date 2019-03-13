@@ -57,18 +57,18 @@ websocket_info({join_subscriber, SessionId, HandleId, RoomId, FeedId}, _ConnStat
                      handle_id => HandleId}),
   {reply, {text, Msg}, State};
 
-websocket_info({send_offer, SessionId, HandleId, Offer}, _ConnState, State) ->
+websocket_info({publish, SessionId, HandleId, Offer}, _ConnState, State) ->
   Msg = jsx:encode(#{janus => message,
-                     transaction => send_offer,
+                     transaction => publish,
                      body => #{request => publish},
                      jsep => Offer,
                      session_id => SessionId,
                      handle_id => HandleId}),
   {reply, {text, Msg}, State};
 
-websocket_info({send_answer, SessionId, HandleId, Answer}, _ConnState, State) ->
+websocket_info({listen, SessionId, HandleId, Answer}, _ConnState, State) ->
   Msg = jsx:encode(#{janus => message,
-                     transaction => send_answer,
+                     transaction => listen,
                      body => #{request => start},
                      jsep => Answer,
                      session_id => SessionId,
@@ -117,7 +117,7 @@ process(#{<<"transaction">> := <<"publish">>,
           <<"jsep">> := Answer}, State) ->
   Msg = #{jsep => Answer},
   send_msg(Msg, State);
-process(#{<<"janus">> := <<"ack">>}, State) ->
+process(_Msg, State) ->
   {ok, State}.
 
 send_msg(Msg, #{from := From} = State) ->
