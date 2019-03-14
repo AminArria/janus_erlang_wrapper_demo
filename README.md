@@ -1,6 +1,6 @@
 # Demo: Erlang wrapper for Janus
 
-This is a demo Erlang app to demonstrate the usage of Janus. For further information regarding "why this demo?" I encourage you to read my blog post [Scalable Broadcasting].
+This is a demo Erlang app to demonstrate the usage of Janus. For further information regarding "why this demo?" I encourage you to read my blog post [Scalable Broadcasting Using WebRTC](https://dev.to/aminarria/scalable-broadcasting-using-webrtc-2984).
 
 The demo will expose the following endpoints:
 - http://localhost:8080/janus-client Client connecting directly to Janus for video broadcast
