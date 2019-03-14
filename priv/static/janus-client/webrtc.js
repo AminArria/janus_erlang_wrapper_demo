@@ -79,7 +79,7 @@ function start_broadcast() {
   });
 }
 
-function join_room_subscriber() {
+function join_broadcast() {
   roomId = parseInt(roomInput.value);
   feedId = parseInt(feedInput.value);
 
