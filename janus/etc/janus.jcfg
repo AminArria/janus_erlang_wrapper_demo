@@ -102,11 +102,11 @@ general: {
 }
 
 # Certificate and key to use for DTLS (and passphrase if needed).
-certificates: {
-	cert_pem = "/opt/janus/share/janus/certs/mycert.pem"
-	cert_key = "/opt/janus/share/janus/certs/mycert.key"
-	#cert_pwd = "secretpassphrase"
-}
+#certificates: {
+#	cert_pem = "/opt/janus/share/janus/certs/mycert.pem"
+#	cert_key = "/opt/janus/share/janus/certs/mycert.key"
+#	#cert_pwd = "secretpassphrase"
+#}
 
 # Media-related stuff: you can configure whether if you want
 # to enable IPv6 support (still WIP, so handle with care), if RFC4588

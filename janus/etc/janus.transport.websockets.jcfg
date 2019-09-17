@@ -37,8 +37,8 @@ admin: {
 }
 
 # Certificate and key to use for any secure WebSocket server, if enabled (and passphrase if needed).
-certificates: {
-	cert_pem = "/opt/janus/share/janus/certs/mycert.pem"
-	cert_key = "/opt/janus/share/janus/certs/mycert.key"
-	#cert_pwd = "secretpassphrase"
-}
+#certificates: {
+#	cert_pem = "/opt/janus/share/janus/certs/mycert.pem"
+#	cert_key = "/opt/janus/share/janus/certs/mycert.key"
+#	#cert_pwd = "secretpassphrase"
+#}
